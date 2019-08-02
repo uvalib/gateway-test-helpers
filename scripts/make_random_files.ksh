@@ -13,9 +13,8 @@ fi
 
 COUNT=$1
 FILES_PER=1000
-FILES_PER=10
 
-BLOCKSIZE=131072
+BLOCKSIZE=102400
 COUNT=100
 
 for dir in $(seq $COUNT); do
@@ -35,7 +34,7 @@ for dir in $(seq $COUNT); do
 
       FILENAME=$DIRNAME/file-$file
       echo "creating $FILENAME..."
-      dd if=/dev/urandom of=$FILENAME bs=$BLOCKSIZE count=$COUNT
+      dd if=/dev/zero of=$FILENAME bs=$BLOCKSIZE count=$COUNT
       res=$?
       if [ $res -ne 0 ]; then
          echo "Error creating $FILENAME, exiting with status $res"
