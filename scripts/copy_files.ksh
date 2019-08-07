@@ -6,7 +6,7 @@
 SCRIPT_DIR=$(dirname $0)
 . $SCRIPT_DIR/common.ksh
 
-sudo cp -Rv $SRC_DIR/ $DEST_DIR/
+cp -Rv $SRC_DIR/ $DEST_DIR/
 res=$?
 
 echo "exiting with status $res"

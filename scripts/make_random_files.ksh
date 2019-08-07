@@ -6,35 +6,35 @@
 SCRIPT_DIR=$(dirname $0)
 . $SCRIPT_DIR/common.ksh
 
-if [ $# -ne 1 ]; then
-   echo "use: $(basename $0) <file count (in thousands)>"
+if [ $# -ne 2 ]; then
+   echo "use: $(basename $0) <start dir> <file count (in thousands)>"
    exit 1
 fi
 
-COUNT=$1
+START=$1
+COUNT=$2
 FILES_PER=1000
 
-BLOCKSIZE=102400
-COUNT=100
+END=$(echo "$START + $COUNT" | bc)
 
-for dir in $(seq $COUNT); do
+for dir in $(seq $START 1 $END); do
 
    # make the directory
    DIRNAME=$DEST_DIR/dir-$dir
-   sudo mkdir -p $DIRNAME
+   mkdir -p $DIRNAME
    res=$?
    if [ $res -ne 0 ]; then
       echo "Error creating $DIRNAME, exiting with status $res"
       exit $res
    fi
 
-   sudo chmod 777 $DIRNAME
+   chmod 777 $DIRNAME
 
    for file in $(seq $FILES_PER); do
 
       FILENAME=$DIRNAME/file-$file
       echo "creating $FILENAME..."
-      dd if=/dev/zero of=$FILENAME bs=$BLOCKSIZE count=$COUNT
+      dd if=/dev/zero of=$FILENAME bs=$BLOCKSIZE count=$BLOCKCOUNT
       res=$?
       if [ $res -ne 0 ]; then
          echo "Error creating $FILENAME, exiting with status $res"

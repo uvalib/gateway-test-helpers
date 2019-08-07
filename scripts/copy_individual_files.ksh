@@ -9,22 +9,28 @@ SCRIPT_DIR=$(dirname $0)
 TMPFILE=/tmp/files.$$
 
 echo "creating file list..."
-sudo find $SRC_DIR -type f | sort > $TMPFILE
+find $SRC_DIR -type f | sort > $TMPFILE
 
 for file in $(<$TMPFILE); do
 
-   FILE=${file/#$SRC_DIR}
+   #FILE=${file#$SRC_DIR}
 
-   echo "copying $FILE..."
-   sudo cp --parents $SRC_DIR/$FILE $DEST_DIR
-   res=$?
-   if [ $res -ne 0 ]; then
-      echo "exiting with status $res"
-      exit $res
+   if [ ! -f $DEST_DIR/$file ]; then
+      echo "copying $file"
+      cp --parents $file $DEST_DIR
+      res=$?
+      if [ $res -ne 0 ]; then
+         echo "exiting with status $res"
+         exit $res
+      fi
+   else
+      echo "$file already exists, skipping..."
    fi
 
 done
 
+rm $TMPFILE
+res=0
 echo "exiting with status $res"
 exit $res
 
